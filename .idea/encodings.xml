@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/bom" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common-tools" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/organization-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/organization-data" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/organization-impl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/organization-impl-reference" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
