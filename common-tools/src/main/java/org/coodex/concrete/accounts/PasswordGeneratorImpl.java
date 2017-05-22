@@ -21,7 +21,7 @@ import org.coodex.concrete.common.ConcreteHelper;
 import org.coodex.util.DigestHelper;
 
 /**
- * 默认密码为p055w0rd，可通过concrete.properties的defaultPassword重载
+ * 默认密码为p@55w0rd，可通过concrete.properties的defaultPassword重载
  * 编码方式为sha1散列
  * Created by davidoff shen on 2017-05-03.
  */
@@ -33,7 +33,7 @@ public class PasswordGeneratorImpl implements PasswordGenerator {
 
     @Override
     public String generate() {
-        return ConcreteHelper.getProfile().getString("defaultPassword", "p055w0rd");
+        return ConcreteHelper.getProfile().getString("defaultPassword", "p@55w0rd");
     }
 
     @Override

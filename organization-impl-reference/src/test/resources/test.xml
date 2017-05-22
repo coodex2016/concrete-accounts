@@ -21,12 +21,13 @@
 
     <bean class="org.coodex.concrete.spring.SpringBeanProvider"/>
     <bean class="org.coodex.concrete.core.token.TokenWrapper"/>
+    <!-- token 选择 -->
     <bean class="org.coodex.concrete.core.token.local.LocalTokenManager"/>
 
     <!-- AccountFactories -->
     <bean class="org.coodex.concrete.common.AccountFactoryAggregation"/>
-    <bean class="org.coodex.concrete.common.conflictsolutions.AccountFactoryAggregationFilter"/>
     <bean class="org.coodex.concrete.accounts.AdministratorFromProfileFactory"/>
+    <bean class="org.coodex.concrete.common.conflictsolutions.AccountFactoryAggregationFilter"/>
 
     <!-- aspect -->
     <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
@@ -34,6 +35,7 @@
     <bean class="org.coodex.concrete.spring.aspects.RBAC_Aspect"/>
 
 
+    <!-- 带默认值的PropertyPlaceholderConfigurer -->
     <bean id="concreteProfile" class="org.coodex.concrete.spring.CoodexPropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
