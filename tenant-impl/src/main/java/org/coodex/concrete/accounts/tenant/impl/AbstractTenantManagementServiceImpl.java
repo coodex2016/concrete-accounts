@@ -93,7 +93,7 @@ public abstract class AbstractTenantManagementServiceImpl<T extends Tenant, E ex
     }
 
     protected Pageable toPageable(PageRequest request) {
-        return new org.springframework.data.domain.PageRequest(request.getNum().intValue(), request.getPageSize());
+        return new org.springframework.data.domain.PageRequest(request.getNum().intValue() - 1, request.getPageSize());
     }
 
 
