@@ -38,12 +38,6 @@
 
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>concrete-accounts-organization-api</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.parent.groupId}</groupId>
                 <artifactId>concrete-accounts-organization-data</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
@@ -56,7 +50,19 @@
 
             <dependency>
                 <groupId>${project.parent.groupId}</groupId>
-                <artifactId>concrete-accounts-organization-impl-reference</artifactId>
+                <artifactId>concrete-accounts-tenant-api</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>concrete-accounts-tenant-data</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.parent.groupId}</groupId>
+                <artifactId>concrete-accounts-tenant-impl</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
         </dependencies>
