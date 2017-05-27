@@ -16,26 +16,22 @@
 
 package org.coodex.concrete.accounts.organization.impl;
 
-import org.coodex.concrete.accounts.AbstractAdministratorFactory;
-import org.coodex.concrete.accounts.AccountID;
-import org.coodex.concrete.accounts.AccountsCommon;
-import org.coodex.concrete.accounts.TOTPAuthenticator;
+import org.coodex.concrete.accounts.*;
 import org.coodex.concrete.accounts.organization.api.AbstractLoginService;
 import org.coodex.concrete.accounts.organization.entities.AbstractPersonAccountEntity;
 import org.coodex.concrete.accounts.organization.entities.AbstractPositionEntity;
 import org.coodex.concrete.accounts.organization.entities.LoginCacheEntryEntity;
 import org.coodex.concrete.accounts.organization.repositories.AbstractPersonAccountRepo;
 import org.coodex.concrete.accounts.organization.repositories.LoginCacheEntryRepo;
-import org.coodex.concrete.common.AccountsErrorCodes;
-import org.coodex.concrete.common.Assert;
-import org.coodex.concrete.common.ConcreteException;
-import org.coodex.concrete.common.Token;
+import org.coodex.concrete.common.*;
 import org.coodex.concrete.core.token.TokenWrapper;
 import org.coodex.util.Common;
 
 import javax.inject.Inject;
 import java.util.Calendar;
 
+import static org.coodex.concrete.accounts.AccountsCommon.checkPassword;
+import static org.coodex.concrete.accounts.AccountsCommon.isCredible;
 import static org.coodex.concrete.common.AccountsErrorCodes.*;
 import static org.coodex.concrete.common.ConcreteContext.putLoggingData;
 
@@ -60,16 +56,20 @@ public abstract class AbstractLoginServiceImpl
     @Inject
     protected AbstractAdministratorFactory administratorFactory;
 
+    @Inject
+    protected TenantRPCServiceClient tenantRPCServiceClient;
+
     @Override
-    public String login(String account, String password, String authCode) {
+    public String login(String tenant, String account, String password, String authCode) {
         if (Common.isBlank(account)) { // 账户为空，视为管理员登录
-            administratorLogin(password, authCode);
+            administratorLogin(tenant, password, authCode);
             return null;
         } else {
             PE personEntity = Assert.isNull(
-                    getPersonEntity(account), AccountsErrorCodes.NONE_THIS_ACCOUNT);
+                    getPersonEntity(account, tenant), AccountsErrorCodes.NONE_THIS_ACCOUNT);
 
             checkPassword(password, personEntity);
+            tenantRPCServiceClient.checkTenant(personEntity.getTenant());
             token.setAccountCredible(isCredible(authCode, personEntity));
             token.setAccount(
                     abstractOrganizationAccountFactory.getAccountByID(
@@ -131,33 +131,23 @@ public abstract class AbstractLoginServiceImpl
         return calendar;
     }
 
-    protected void checkPassword(String password, PE personEntity) {
-        Assert.not(
-                AccountsCommon.getEncodedPassword(password).equals(personEntity.getPassword()),
-                LOGIN_FAILED);
-    }
+//    protected void checkPassword(String password, PE personEntity) {
+//        AccountsCommon.checkPassword(password, personEntity);
+//    }
 
-    protected PE getPersonEntity(String account) {
+    protected PE getPersonEntity(String account, String tenant) {
         if (isCellPhone(account)) {
-            return personAccountRepo.findFirstByCellphone(account);
+            return personAccountRepo.findFirstByCellphoneAndTenant(account, tenant);
         } else if (isIdCard(account)) {
-            return personAccountRepo.findFirstByIdCardNo(account);
+            return personAccountRepo.findFirstByIdCardNoAndTenant(account, tenant);
         } else if (isEmail(account)) {
-            return personAccountRepo.findFirstByEmail(account);
+            return personAccountRepo.findFirstByEmailAndTenant(account, tenant);
         } else {
-            return getAccountEntityBy(account);
+            return getAccountEntityBy(account, tenant);
         }
     }
 
-    protected boolean isCredible(String authCode, PE personEntity) {
-        if (personEntity.getAuthCodeKey() != null) {
-            Assert.not(TOTPAuthenticator.authenticate(
-                    authCode, personEntity.getAuthCodeKey()), LOGIN_FAILED);
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
 
     /**
@@ -166,20 +156,20 @@ public abstract class AbstractLoginServiceImpl
      * @param account
      * @return
      */
-    protected PE getAccountEntityBy(String account) {
+    protected PE getAccountEntityBy(String account, String tenant) {
         return null;
     }
 
-    protected PE getAccountEntityByCellPhone(String cellPhone) {
-        return personAccountRepo.findFirstByCellphone(cellPhone);
+    protected PE getAccountEntityByCellPhone(String cellPhone, String tenant) {
+        return personAccountRepo.findFirstByCellphoneAndTenant(cellPhone, tenant);
     }
 
-    protected PE getAccountEntityByEmail(String email) {
-        return personAccountRepo.findFirstByEmail(email);
+    protected PE getAccountEntityByEmail(String email, String tenant) {
+        return personAccountRepo.findFirstByEmailAndTenant(email, tenant);
     }
 
-    protected PE getAccountEntityByIdCardNo(String idCardNo) {
-        return personAccountRepo.findFirstByIdCardNo(idCardNo);
+    protected PE getAccountEntityByIdCardNo(String idCardNo, String tenant) {
+        return personAccountRepo.findFirstByIdCardNoAndTenant(idCardNo, tenant);
     }
 
     protected boolean hasAtChar(String account) {
@@ -218,8 +208,8 @@ public abstract class AbstractLoginServiceImpl
     }
 
     @Override
-    public void administratorLogin(String password, String authCode) {
-        administratorFactory.login(AccountsCommon.SETTINGS.getString("administrator.id"), password, authCode);
+    public void administratorLogin(String tenant, String password, String authCode) {
+        administratorFactory.login(tenant, AccountsCommon.SETTINGS.getString("administrator.id"), password, authCode);
     }
 
     @Override
@@ -229,6 +219,7 @@ public abstract class AbstractLoginServiceImpl
                         loginCacheEntryRepo.findFirstByCredential(credential), NONE_THIS_CREDENTIAL);
         PE personEntity = Assert.isNull(
                 personAccountRepo.findOne(loginCacheEntryEntity.getAccountId()), NONE_THIS_ACCOUNT);
+        tenantRPCServiceClient.checkTenant(personEntity.getTenant());
         token.setAccount(
                 abstractOrganizationAccountFactory.getAccountByID(
                         new AccountID(AccountID.TYPE_ORGANIZATION, personEntity.getId())));

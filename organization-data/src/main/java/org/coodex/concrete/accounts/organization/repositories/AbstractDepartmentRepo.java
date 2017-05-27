@@ -28,5 +28,5 @@ import java.util.List;
 @NoRepositoryBean
 public interface AbstractDepartmentRepo<D extends AbstractDepartmentEntity> extends CrudRepository<D, String> {
 
-    List<D> findByHigherLevelIdOrderByDisplayOrderDesc(String higherLevelId);
+    List<D> findByTenantAndHigherLevelIdOrderByDisplayOrderDesc(String tenant, String higherLevelId);
 }

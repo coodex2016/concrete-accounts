@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package org.coodex.concrete.common;
+package org.coodex.concrete.accounts;
+
+import java.util.Set;
 
 /**
- * Created by davidoff shen on 2017-04-28.
+ * Created by davidoff shen on 2017-05-10.
  */
-public class AccountManagementRoles {
-    // 系统管理员
-    public static final String SYSTEM_MANAGER = "SystemManager";
-    // 组织管理员
-    // 组织管理员角色需要赋予职位，从而确定账户可以管理哪些部门
-    // 账户可以管理角色所在的组织及其下属组织
-    public static final String ORGANIZATION_MANAGER = "OrgManager";
+public interface AuthorizableEntity {
 
+    Set<String> getRoles();
 
+    void setRoles(Set<String> roles);
 }

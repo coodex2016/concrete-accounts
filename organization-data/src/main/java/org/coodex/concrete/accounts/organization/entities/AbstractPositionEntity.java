@@ -16,6 +16,8 @@
 
 package org.coodex.concrete.accounts.organization.entities;
 
+import org.coodex.concrete.accounts.AuthorizableEntity;
+
 import javax.persistence.*;
 import java.util.Set;
 

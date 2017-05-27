@@ -14,16 +14,28 @@
  * limitations under the License.
  */
 
-package org.coodex.concrete.accounts.organization.entities;
+package org.coodex.concrete.accounts;
 
-import java.util.Set;
+import java.util.Calendar;
 
 /**
- * Created by davidoff shen on 2017-05-10.
+ * Created by davidoff shen on 2017-05-25.
  */
-public interface AuthorizableEntity {
+public interface CanLoginEntity {
 
-    Set<String> getRoles();
+    String getId();
 
-    void setRoles(Set<String> roles);
+    String getName();
+
+    String getPassword();
+
+    void setPassword(String password);
+
+    String getAuthCodeKey();
+
+    void setAuthCodeKey(String authCodeKey);
+
+    Calendar getAuthCodeKeyActiveTime();
+
+    void setAuthCodeKeyActiveTime(Calendar authCodeKeyActiveTime);
 }

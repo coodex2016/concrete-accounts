@@ -23,6 +23,8 @@
     <bean class="org.coodex.concrete.core.token.TokenWrapper"/>
     <!-- token 选择 -->
     <bean class="org.coodex.concrete.core.token.local.LocalTokenManager"/>
+    <!-- SaaS 账户匹配 -->
+    <bean class="org.coodex.concrete.accounts.SaaSTenantBuilder"/>
 
     <!-- AccountFactories -->
     <bean class="org.coodex.concrete.common.AccountFactoryAggregation"/>
@@ -34,6 +36,8 @@
     <bean class="org.coodex.concrete.spring.aspects.OperationLogAspect"/>
     <bean class="org.coodex.concrete.spring.aspects.RBAC_Aspect"/>
 
+    <!-- tenant checker -->
+    <bean class="org.coodex.concrete.accounts.NoneTenantArchitecture"/>
 
     <!-- 带默认值的PropertyPlaceholderConfigurer -->
     <bean id="concreteProfile" class="org.coodex.concrete.spring.CoodexPropertyPlaceholderConfigurer">

@@ -17,11 +17,12 @@
 package org.coodex.concrete.accounts;
 
 import org.coodex.concrete.common.NamedAccount;
+import org.coodex.concrete.common.SaaSAccount;
 
 /**
  * Created by davidoff shen on 2017-05-19.
  */
-public interface Administrator extends NamedAccount<AccountID> {
+public interface Administrator extends NamedAccount<AccountID>, SaaSAccount<AccountID> {
 
     boolean verify(String password, String authCode);
 }

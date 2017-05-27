@@ -21,15 +21,16 @@ import org.coodex.concrete.api.*;
 import org.coodex.concrete.api.pojo.StrID;
 import org.coodex.concrete.jaxrs.BigString;
 
-import static org.coodex.concrete.common.AccountManagementRoles.ORGANIZATION_MANAGER;
-import static org.coodex.concrete.common.AccountManagementRoles.SYSTEM_MANAGER;
+import static org.coodex.concrete.accounts.AccountManagementRoles.ORGANIZATION_MANAGER;
+import static org.coodex.concrete.accounts.AccountManagementRoles.SYSTEM_MANAGER;
+import static org.coodex.concrete.accounts.AccountManagementRoles.TENANT_MANAGER;
 
 /**
  * Created by davidoff shen on 2017-04-28.
  */
 @MicroService("institutions")
 @Abstract
-@AccessAllow(roles = {SYSTEM_MANAGER, ORGANIZATION_MANAGER})
+@AccessAllow(roles = {SYSTEM_MANAGER,TENANT_MANAGER, ORGANIZATION_MANAGER})
 @Safely
 public interface AbstractInstitutionManagementService<I extends Institution> extends ConcreteService {
     @Description(name = "新建单位", description = "LOGGING: new 新建单位的实体数据")

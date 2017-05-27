@@ -16,8 +16,6 @@
 
 package org.coodex.concrete.accounts;
 
-import org.coodex.concrete.common.AccountManagementRoles;
-import org.coodex.util.Common;
 import org.coodex.util.Profile;
 
 import java.util.Arrays;
@@ -37,9 +35,18 @@ import java.util.Set;
  */
 public class AdministratorFromProfileFactory extends AbstractAdministratorFactory {
 
-    public static final Profile ADMINISTRATOR_INFO = Profile.getProfile("administrator.properties");
+    private static class AdministratorFromProfile implements Administrator {
+        private String uuid;
+        private String tenant;
 
-    private static final Administrator ADMINISTRATOR = new Administrator() {
+        public AdministratorFromProfile(String uuid) {
+            this.uuid = uuid;
+        }
+
+        public AdministratorFromProfile(String uuid, String tenant) {
+            this.uuid = uuid;
+            this.tenant = tenant;
+        }
 
         @Override
         public boolean verify(String password, String authCode) {
@@ -49,7 +56,7 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
             return TOTPAuthenticator.authenticate(authCode, ADMINISTRATOR_INFO.getString("authKey"));
         }
 
-        private AccountID id = new AccountID(AccountID.TYPE_ADMINISTRATOR, Common.getUUIDStr());
+//        private AccountID id = ;
 
         @Override
         public String getName() {
@@ -58,7 +65,7 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
 
         @Override
         public AccountID getId() {
-            return id;
+            return new AccountID(AccountID.TYPE_ADMINISTRATOR, uuid);
         }
 
         @Override
@@ -73,11 +80,59 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
         public boolean isValid() {
             return ADMINISTRATOR_INFO.getBool("valid", true);
         }
-    };
+
+        @Override
+        public String getTenant() {
+            return tenant;
+        }
+    }
+
+    public static final Profile ADMINISTRATOR_INFO = Profile.getProfile("administrator.properties");
+
+//    private static final Administrator ADMINISTRATOR = new Administrator() {
+//
+//        @Override
+//        public boolean verify(String password, String authCode) {
+//            if (password == null || !password.equals(ADMINISTRATOR_INFO.getString("encoded.password",
+//                    AccountsCommon.getDefaultPassword()))) return false;
+//
+//            return TOTPAuthenticator.authenticate(authCode, ADMINISTRATOR_INFO.getString("authKey"));
+//        }
+//
+//        private AccountID id = new AccountID(AccountID.TYPE_ADMINISTRATOR, Common.getUUIDStr());
+//
+//        @Override
+//        public String getName() {
+//            return ADMINISTRATOR_INFO.getString("name", "administrator");
+//        }
+//
+//        @Override
+//        public AccountID getId() {
+//            return id;
+//        }
+//
+//        @Override
+//        public Set<String> getRoles() {
+//            return new HashSet<String>(Arrays.asList(
+//                    ADMINISTRATOR_INFO.getStrList("roles", ",",
+//                            new String[]{AccountManagementRoles.SYSTEM_MANAGER})
+//            ));
+//        }
+//
+//        @Override
+//        public boolean isValid() {
+//            return ADMINISTRATOR_INFO.getBool("valid", true);
+//        }
+//    };
 
 
     @Override
-    protected Administrator getAdministrator(final String id) {
-        return ADMINISTRATOR;
+    protected Administrator getAdministrator(String id) {
+        return new AdministratorFromProfile(id);
+    }
+
+    @Override
+    protected Administrator getAdministrator(String id, String tenant) {
+        return new AdministratorFromProfile(id, tenant);
     }
 }

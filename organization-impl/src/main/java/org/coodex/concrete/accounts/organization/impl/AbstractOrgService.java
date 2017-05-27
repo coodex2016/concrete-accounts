@@ -17,6 +17,7 @@
 package org.coodex.concrete.accounts.organization.impl;
 
 import org.coodex.concrete.accounts.AccountID;
+import org.coodex.concrete.accounts.TenantAccount;
 import org.coodex.concrete.accounts.organization.entities.AbstractPersonAccountEntity;
 import org.coodex.concrete.accounts.organization.entities.AbstractPositionEntity;
 import org.coodex.concrete.accounts.organization.entities.OrganizationEntity;
@@ -26,23 +27,34 @@ import org.coodex.concrete.api.AccessAllow;
 import org.coodex.concrete.common.*;
 import org.coodex.concrete.core.token.TokenWrapper;
 import org.coodex.util.Common;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Set;
 
-import static org.coodex.concrete.common.AccountManagementRoles.ORGANIZATION_MANAGER;
-import static org.coodex.concrete.common.AccountManagementRoles.SYSTEM_MANAGER;
+import static org.coodex.concrete.accounts.AccountManagementRoles.ORGANIZATION_MANAGER;
+import static org.coodex.concrete.accounts.AccountManagementRoles.SYSTEM_MANAGER;
+import static org.coodex.concrete.accounts.AccountManagementRoles.TENANT_MANAGER;
+import static org.coodex.concrete.accounts.AccountsCommon.getTenant;
 import static org.coodex.concrete.common.OrganizationErrorCodes.NONE_THIS_ORGANIZATION;
 
 /**
  * Created by davidoff shen on 2017-05-18.
  */
 public abstract class AbstractOrgService<J extends AbstractPositionEntity, P extends AbstractPersonAccountEntity<J>> {
+
+    private final static Logger log = LoggerFactory.getLogger(AbstractOrgService.class);
+
+
     protected Token token = TokenWrapper.getInstance();
     @Inject
     protected OrganizationRepo organizationRepo;
     @Inject
     protected AbstractPersonAccountRepo<P> personAccountRepo;
+
+
+
 
     /**
      * 检查是否具有管理orgId的权限
@@ -50,16 +62,37 @@ public abstract class AbstractOrgService<J extends AbstractPositionEntity, P ext
      * [管理所有组织]
      * AccessAllow.PREROGATIVE
      * SYSTEM_MANAGER
+     * [租户管理员，需要验证所操作的组织是否为租户的组织，新建顶级单位时，需要确定租户的appSet是否和当前appSet相同]
+     * TENANT_MANAGER
      * [指定组织，根据职位的的权限进行判定，当人员的职位上有ORGANIZATION_MANAGER角色时，则人员拥有职位所属组织及其下级的管理权]
      * ORGANIZATION_MANAGER
      *
      * @param orgId
      */
     protected void checkManagementPermission(String orgId) {
+        ConcreteException exception = new ConcreteException(ErrorCodes.NO_AUTHORIZATION);
         Account<AccountID> account = token.currentAccount();
         Set<String> roles = account.getRoles();
         if (roles.contains(AccessAllow.PREROGATIVE)) return;
         if (roles.contains(SYSTEM_MANAGER)) return;
+        if (roles.contains(TENANT_MANAGER)) {
+            if (!Common.isBlank(orgId)) {
+                OrganizationEntity organizationEntity = organizationRepo.findOne(orgId);
+                if (Common.isSameStr(organizationEntity.getTenant(), getTenant())) return;
+            } else {
+                if (account instanceof TenantAccount) {
+                    TenantAccount tenantAccount = (TenantAccount) account;
+                    if (Common.isSameStr(tenantAccount.getAppSet(), ConcreteHelper.getAppSet())) {
+                        return;
+                    } else {
+                        log.info("{}(set {}) cannot use in this set: {}.",
+                                tenantAccount.getName(),
+                                tenantAccount.getAppSet(),
+                                ConcreteHelper.getAppSet());
+                    }
+                }
+            }
+        }
 
         if (!Common.isBlank(orgId)) {
             for (J position : personAccountRepo.findOne(account.getId().getId()).getPositions()) {
@@ -75,7 +108,7 @@ public abstract class AbstractOrgService<J extends AbstractPositionEntity, P ext
                 }
             }
         }
-        throw new ConcreteException(ErrorCodes.NO_AUTHORIZATION);
+        throw exception;
     }
 
     /**
@@ -101,9 +134,11 @@ public abstract class AbstractOrgService<J extends AbstractPositionEntity, P ext
      */
     protected void checkDuplication(String higherLevel, String name, String id) {
         if (id == null) {
-            Assert.notNull(organizationRepo.findOneByNameAndHigherLevelId(name, higherLevel), OrganizationErrorCodes.DUPLICATED_NAME);
+            Assert.notNull(organizationRepo.findOneByTenantAndNameAndHigherLevelId(
+                    getTenant(), name, higherLevel), OrganizationErrorCodes.DUPLICATED_NAME);
         } else {
-            Assert.notNull(organizationRepo.findOneByNameAndHigherLevelIdAndIdNot(name, higherLevel, id), OrganizationErrorCodes.DUPLICATED_NAME);
+            Assert.notNull(organizationRepo.findOneByTenantAndNameAndHigherLevelIdAndIdNot(
+                    getTenant(), name, higherLevel, id), OrganizationErrorCodes.DUPLICATED_NAME);
         }
     }
 

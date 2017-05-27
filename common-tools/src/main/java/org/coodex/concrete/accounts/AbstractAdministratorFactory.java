@@ -46,8 +46,19 @@ public abstract class AbstractAdministratorFactory implements AcceptableAccountF
     }
 
 
-    public void login(String id, String password, String authCode) {
-        Administrator administrator = getAdministrator(id);
+//    public void login(String id, String password, String authCode) {
+//        Administrator administrator = getAdministrator(id);
+//        if (administrator.verify(password, authCode)) {
+//            token.setAccount(administrator);
+//            token.setAccountCredible(true);
+//        } else {
+//            throw new ConcreteException(LOGIN_FAILED);
+//        }
+//    }
+
+
+    public void login(String tenant, String id, String password, String authCode) {
+        Administrator administrator = getAdministrator(id, tenant);
         if (administrator.verify(password, authCode)) {
             token.setAccount(administrator);
             token.setAccountCredible(true);
@@ -58,4 +69,6 @@ public abstract class AbstractAdministratorFactory implements AcceptableAccountF
 
 
     protected abstract Administrator getAdministrator(String id);
+
+    protected abstract Administrator getAdministrator(String id, String tenant);
 }

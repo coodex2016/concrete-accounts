@@ -24,7 +24,6 @@ import org.coodex.concrete.accounts.organization.pojo.Person;
 import org.coodex.concrete.accounts.organization.pojo.Position;
 import org.coodex.concrete.accounts.organization.reference.api.*;
 import org.coodex.concrete.api.pojo.StrID;
-import org.coodex.concrete.common.AccountManagementRoles;
 import org.coodex.concrete.common.Token;
 import org.coodex.concrete.core.token.TokenWrapper;
 import org.coodex.concrete.test.ConcreteTestCase;
@@ -106,7 +105,7 @@ public class TestCases extends ConcreteTestCase {
         loginService.logout();
 
         token.renew();
-        loginService.login(person.getPojo().getIdCardNo(), AccountsCommon.getDefaultPassword(), null);
+        loginService.login(null, person.getPojo().getIdCardNo(), AccountsCommon.getDefaultPassword(), null);
         Assert.assertFalse(token.isAccountCredible());
         String totp = selfManagementService.authenticatorDesc(null);
         String authKey = getAuthKeyFromTOTP(totp);
@@ -122,12 +121,12 @@ public class TestCases extends ConcreteTestCase {
         loginService.logout();
 
         token.renew();
-        loginService.login(newCellPhone, newPassword, getAuthCode(authKey));
+        loginService.login(null, newCellPhone, newPassword, getAuthCode(authKey));
         Assert.assertTrue(token.isAccountCredible());
         loginService.logout();
 
         token.renew();
-        loginService.login(newEmail, newPassword, getAuthCode(authKey));
+        loginService.login(null, newEmail, newPassword, getAuthCode(authKey));
         Assert.assertTrue(token.isAccountCredible());
         log.info("allRoles: {}", JSON.toJSONString(selfManagementService.getMyRoles(), true));
         log.info("departments: {}", JSON.toJSONString(selfManagementService.getMyDepartments(), true));
@@ -145,7 +144,7 @@ public class TestCases extends ConcreteTestCase {
     protected void administratorLogin() throws InvalidKeyException, NoSuchAlgorithmException {
         String authCode = getAuthCode(ADMINISTRATOR_INFO.getString("authKey"));
         log.info("adminLogin. authCode[{}]", authCode);
-        loginService.administratorLogin(AccountsCommon.getDefaultPassword(), authCode);
+        loginService.administratorLogin(null, AccountsCommon.getDefaultPassword(), authCode);
         Assert.assertTrue(token.isAccountCredible());
     }
 

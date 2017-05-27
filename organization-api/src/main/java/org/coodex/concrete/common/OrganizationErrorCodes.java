@@ -42,15 +42,10 @@ public class OrganizationErrorCodes extends AccountsErrorCodes {
 
     public static final int NOT_ORGANIZATION_ACCOUNT = BASE + 9;
 
-    public static final int AUTHORIZE_FAILED = BASE + 10;
+    public static final int CELL_PHONE_EXISTS = BASE + 10;
 
-    public static final int ACCOUNT_NOT_ACTIVED = BASE + 11;
+    public static final int ID_CARD_NO_EXISTS = BASE + 11;
 
-    public static final int CELL_PHONE_EXISTS = BASE + 12;
+    public static final int EMAIL_EXISTS = BASE + 12;
 
-    public static final int ID_CARD_NO_EXISTS = BASE + 13;
-
-    public static final int EMAIL_EXISTS = BASE + 13;
-
-    public static final int AUTH_KEY_FAILURE = BASE + 14;
 }

@@ -27,6 +27,7 @@ public interface AbstractLoginService extends ConcreteService {
 
     @Description(name = "帐号登录", description = "返回值为缓存信息，用于有效期内免秘登录")
     String login(
+            String tenant,
             @Description(name = "帐号", description = "可以是身份证号/邮箱/手机号")
             @BigString
                     String account,
@@ -40,7 +41,7 @@ public interface AbstractLoginService extends ConcreteService {
 
     @MicroService("login/administrator")
     @Description(name = "系统管理员登录", description = "用于系统初始化管理")
-    void administratorLogin(@BigString String password, @BigString String authCode);
+    void administratorLogin(String tenant, @BigString String password, @BigString String authCode);
 
     @MicroService("login/credential")
     @Description(name = "使用缓存的令牌登录", description = "登录后账户为不可信状态")

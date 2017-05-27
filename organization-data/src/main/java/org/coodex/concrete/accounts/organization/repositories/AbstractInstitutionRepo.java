@@ -28,8 +28,8 @@ import java.util.List;
 @NoRepositoryBean
 public interface AbstractInstitutionRepo<I extends AbstractInstitutionEntity> extends CrudRepository<I, String> {
 
-    List<I> findByHigherLevelIdIsNullOrderByDisplayOrderDesc();
+    List<I> findByTenantAndHigherLevelIdIsNullOrderByDisplayOrderDesc(String tenant);
 
-    List<I> findByHigherLevelIdOrderByDisplayOrderDesc(String higherLevelId);
+    List<I> findByTenantAndHigherLevelIdOrderByDisplayOrderDesc(String tenant, String higherLevelId);
 
 }

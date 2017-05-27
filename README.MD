@@ -2,6 +2,10 @@
 
 Concrete-accounts面向concrete提供多种可扩展、开箱即用人员、账户管理模型。
 
+## 多租户架构
+
+![image](tenantArchitechture.png)
+
 ## organization
 
 ### 模型

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.coodex.concrete.accounts.organization.pojo;
+package org.coodex.concrete.accounts;
 
 import org.coodex.concrete.api.Description;
 import org.coodex.concrete.api.mockers.DateTime;

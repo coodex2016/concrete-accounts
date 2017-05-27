@@ -18,15 +18,17 @@ package org.coodex.concrete.accounts.organization.impl;
 
 import org.coodex.concrete.accounts.AccountID;
 import org.coodex.concrete.common.NamedAccount;
+import org.coodex.concrete.common.SaaSAccount;
 
 import java.util.Set;
 
 /**
  * Created by davidoff shen on 2017-05-09.
  */
-public class OrganizationAccount implements NamedAccount<AccountID> {
+public class OrganizationAccount implements NamedAccount<AccountID>, SaaSAccount<AccountID> {
 
     private String name;
+    private String tenant;
     private AccountID id;
     private Set<String> roles;
 
@@ -61,5 +63,14 @@ public class OrganizationAccount implements NamedAccount<AccountID> {
 
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
     }
 }

@@ -60,6 +60,7 @@ public abstract class AbstractOrganizationAccountFactory
             organizationAccount.setId(new AccountID(TYPE_ORGANIZATION, p.getId()));
             organizationAccount.setName(p.getName());
             organizationAccount.setRoles(getAllRoles(p));
+            organizationAccount.setTenant(p.getTenant());
             return organizationAccount;
         }
 

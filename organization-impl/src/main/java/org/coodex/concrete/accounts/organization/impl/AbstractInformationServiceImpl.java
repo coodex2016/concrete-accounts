@@ -34,6 +34,8 @@ import org.springframework.data.domain.Sort;
 import javax.inject.Inject;
 import java.util.*;
 
+import static org.coodex.concrete.accounts.AccountsCommon.getTenant;
+
 /**
  * Created by davidoff shen on 2017-05-18.
  */
@@ -71,7 +73,7 @@ public abstract class AbstractInformationServiceImpl<
     public List<InstitutionFull<I, D, J, P>> get() {
 
         List<InstitutionFull<I, D, J, P>> institutionFullList = new ArrayList<InstitutionFull<I, D, J, P>>();
-        for (IE institution : institutionRepo.findByHigherLevelIdIsNullOrderByDisplayOrderDesc()) {
+        for (IE institution : institutionRepo.findByTenantAndHigherLevelIdIsNullOrderByDisplayOrderDesc(getTenant())) {
             institutionFullList.add($getOneInstitutionFull(institution.getId()));
         }
         return institutionFullList;
@@ -87,13 +89,15 @@ public abstract class AbstractInformationServiceImpl<
 
         // 添加下级单位
         institutionFull.setInstitutions(new ArrayList<InstitutionFull<I, D, J, P>>());
-        for (IE subInstitution : institutionRepo.findByHigherLevelIdOrderByDisplayOrderDesc(institutionEntity.getId())) {
+        for (IE subInstitution : institutionRepo.findByTenantAndHigherLevelIdOrderByDisplayOrderDesc(
+                getTenant(), institutionEntity.getId())) {
             institutionFull.getInstitutions().add($getOneInstitutionFull(subInstitution.getId()));
         }
 
         // 添加下级部门
         institutionFull.setDepartments(new ArrayList<DepartmentFull<D, J, P>>());
-        for (DE department : departmentRepo.findByHigherLevelIdOrderByDisplayOrderDesc(institutionEntity.getId())) {
+        for (DE department : departmentRepo.findByTenantAndHigherLevelIdOrderByDisplayOrderDesc(
+                getTenant(), institutionEntity.getId())) {
             institutionFull.getDepartments().add($getOneDepartmentFull(department.getId()));
         }
 
@@ -178,7 +182,7 @@ public abstract class AbstractInformationServiceImpl<
     @Override
     public List<StrID<I>> getInstitutions() {
         List<StrID<I>> list = new ArrayList<StrID<I>>();
-        for (IE institutionEntity : institutionRepo.findByHigherLevelIdIsNullOrderByDisplayOrderDesc()) {
+        for (IE institutionEntity : institutionRepo.findByTenantAndHigherLevelIdIsNullOrderByDisplayOrderDesc(getTenant())) {
             list.add(new StrID<I>(institutionEntity.getId(), institutionCopier.copyB2A(institutionEntity)));
         }
         return list;
@@ -189,7 +193,7 @@ public abstract class AbstractInformationServiceImpl<
         if (higherLevel != null)
             checkBelongToExists(higherLevel);
         List<StrID<I>> list = new ArrayList<StrID<I>>();
-        for (IE institutionEntity : institutionRepo.findByHigherLevelIdOrderByDisplayOrderDesc(higherLevel)) {
+        for (IE institutionEntity : institutionRepo.findByTenantAndHigherLevelIdOrderByDisplayOrderDesc(getTenant(), higherLevel)) {
             list.add(new StrID<I>(institutionEntity.getId(), institutionCopier.copyB2A(institutionEntity)));
         }
         return list;
@@ -241,7 +245,8 @@ public abstract class AbstractInformationServiceImpl<
     protected List<StrID<D>> $getDepartmentsOfOrganization(String organization) {
         checkBelongToExists(organization);
         List<StrID<D>> list = new ArrayList<StrID<D>>();
-        for (DE departmentEntity : departmentRepo.findByHigherLevelIdOrderByDisplayOrderDesc(organization)) {
+        for (DE departmentEntity : departmentRepo.findByTenantAndHigherLevelIdOrderByDisplayOrderDesc(
+                getTenant(), organization)) {
             list.add(new StrID<D>(departmentEntity.getId(), departmentCopier.copyB2A(departmentEntity)));
         }
         return list;

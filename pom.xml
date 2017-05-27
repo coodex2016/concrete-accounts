@@ -33,6 +33,10 @@
         <module>common-tools</module>
         <!-- 参考实现模块 -->
         <module>organization-impl-reference</module>
+        <module>tenant-api</module>
+        <module>tenant-data</module>
+        <module>tenant-impl</module>
+        <module>tenant-impl-reference</module>
     </modules>
 
 

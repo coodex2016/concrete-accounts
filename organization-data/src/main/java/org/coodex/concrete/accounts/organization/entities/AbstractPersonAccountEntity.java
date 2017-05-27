@@ -16,6 +16,9 @@
 
 package org.coodex.concrete.accounts.organization.entities;
 
+import org.coodex.concrete.accounts.AuthorizableEntity;
+import org.coodex.concrete.accounts.CanLoginEntity;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Set;
@@ -25,7 +28,7 @@ import java.util.Set;
  */
 @MappedSuperclass
 public abstract class AbstractPersonAccountEntity<J extends AbstractPositionEntity>
-        extends AbstractEntity implements AuthorizableEntity {
+        extends AbstractEntity implements AuthorizableEntity, CanLoginEntity {
 
     private String birthDay;
     private Integer sex;
@@ -114,26 +117,32 @@ public abstract class AbstractPersonAccountEntity<J extends AbstractPositionEnti
         this.roles = roles;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
+    @Override
     public String getAuthCodeKey() {
         return authCodeKey;
     }
 
+    @Override
     public void setAuthCodeKey(String authCodeKey) {
         this.authCodeKey = authCodeKey;
     }
 
+    @Override
     public Calendar getAuthCodeKeyActiveTime() {
         return authCodeKeyActiveTime;
     }
 
+    @Override
     public void setAuthCodeKeyActiveTime(Calendar authCodeKeyActiveTime) {
         this.authCodeKeyActiveTime = authCodeKeyActiveTime;
     }

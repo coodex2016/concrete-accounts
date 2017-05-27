@@ -17,11 +17,12 @@
 package org.coodex.concrete.accounts.organization.pojo;
 
 import org.coodex.concrete.api.Description;
+import org.coodex.concrete.accounts.AbstractPojo;
 
 /**
  * Created by davidoff shen on 2017-04-28.
  */
-public abstract class Organization extends AbstractPojo{
+public abstract class Organization extends AbstractPojo {
     public static final int TYPE_INSTITUTION = 1;
     public static final int TYPE_DEPARTMENT = 2;
     private String description;

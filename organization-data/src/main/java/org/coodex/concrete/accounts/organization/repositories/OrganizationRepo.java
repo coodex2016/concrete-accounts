@@ -26,11 +26,11 @@ import java.util.List;
  */
 public interface OrganizationRepo extends CrudRepository<OrganizationEntity, String> {
 
-    List<OrganizationEntity> findByHigherLevelId(String higherLevelId);
+    List<OrganizationEntity> findByTenantAndHigherLevelId(String tenant, String higherLevelId);
 
-    OrganizationEntity findOneByNameAndHigherLevelId(String name, String higherLevelId);
+    OrganizationEntity findOneByTenantAndNameAndHigherLevelId(String tenant, String name, String higherLevelId);
 
-    OrganizationEntity findOneByNameAndHigherLevelIdAndIdNot(String name, String higherLevelId, String id);
+    OrganizationEntity findOneByTenantAndNameAndHigherLevelIdAndIdNot(String tenant, String name, String higherLevelId, String id);
 
-    Long countByHigherLevelId(String higherLevelId);
+//    Long countByHigherLevelId(String higherLevelId);
 }

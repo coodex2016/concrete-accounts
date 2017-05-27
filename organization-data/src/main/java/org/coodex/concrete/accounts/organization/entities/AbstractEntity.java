@@ -33,6 +33,8 @@ public abstract class AbstractEntity implements Serializable {
     @Id
     private String id = Common.getUUIDStr();
 
+    private String tenant;
+
     private Integer displayOrder = DEFAULT_ORDER;
 
     @Column(nullable = false)
@@ -69,7 +71,16 @@ public abstract class AbstractEntity implements Serializable {
         return name;
     }
 
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
     }
 }

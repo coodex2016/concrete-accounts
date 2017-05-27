@@ -24,6 +24,7 @@ import java.io.Serializable;
 public class AccountID implements Serializable {
     public static final int TYPE_ADMINISTRATOR = 0;
     public static final int TYPE_ORGANIZATION = 1;
+    public static final int TYPE_TENANT_ADMINISTRATOR = 2;
 
     private int type;
 

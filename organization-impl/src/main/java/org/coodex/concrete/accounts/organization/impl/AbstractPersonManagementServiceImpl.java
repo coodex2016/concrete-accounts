@@ -17,6 +17,7 @@
 package org.coodex.concrete.accounts.organization.impl;
 
 import org.coodex.concrete.accounts.AccountsCommon;
+import org.coodex.concrete.accounts.CanLoginEntity;
 import org.coodex.concrete.accounts.Constants;
 import org.coodex.concrete.accounts.organization.api.AbstractPersonManagementService;
 import org.coodex.concrete.accounts.organization.entities.AbstractPersonAccountEntity;
@@ -28,11 +29,13 @@ import org.coodex.concrete.common.Assert;
 import org.coodex.concrete.common.OrganizationErrorCodes;
 import org.coodex.concrete.common.TwoWayCopier;
 import org.coodex.util.Common;
+import org.springframework.data.repository.CrudRepository;
 
 import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.coodex.concrete.accounts.AccountsCommon.getTenant;
 import static org.coodex.concrete.common.ConcreteContext.putLoggingData;
 import static org.coodex.concrete.common.OrganizationErrorCodes.PERSON_NOT_EXISTS;
 import static org.coodex.concrete.common.OrganizationErrorCodes.POSITION_NOT_EXISTS;
@@ -55,13 +58,13 @@ public abstract class AbstractPersonManagementServiceImpl
     @Override
     public StrID<P> save(P person, String[] positions) {
         if (person.getCellphone() != null) {
-            Assert.is(personAccountRepo.countByCellphone(person.getCellphone()) != 0, OrganizationErrorCodes.CELL_PHONE_EXISTS);
+            Assert.is(personAccountRepo.countByCellphoneAndTenant(person.getCellphone(), getTenant()) != 0, OrganizationErrorCodes.CELL_PHONE_EXISTS);
         }
         if (person.getIdCardNo() != null) {
-            Assert.is(personAccountRepo.countByIdCardNo(person.getIdCardNo()) != 0, OrganizationErrorCodes.ID_CARD_NO_EXISTS);
+            Assert.is(personAccountRepo.countByIdCardNoAndTenant(person.getIdCardNo(), getTenant()) != 0, OrganizationErrorCodes.ID_CARD_NO_EXISTS);
         }
         if (person.getEmail() != null) {
-            Assert.is(personAccountRepo.countByEmail(person.getEmail()) != 0, OrganizationErrorCodes.EMAIL_EXISTS);
+            Assert.is(personAccountRepo.countByEmailAndTenant(person.getEmail(), getTenant()) != 0, OrganizationErrorCodes.EMAIL_EXISTS);
         }
         E personEntity = personCopier.copyA2B(person);
         personEntity.setPositions(getPositionsWithPermissionCheck(positions));
@@ -90,13 +93,13 @@ public abstract class AbstractPersonManagementServiceImpl
     public void update(String id, P person) {
         E personEntity = getPersonEntityWithPermissionCheck(id);
         if (!Common.isSameStr(person.getCellphone(), personEntity.getCellphone()) && person.getCellphone() != null) {
-            Assert.is(personAccountRepo.countByCellphone(person.getCellphone()) != 0, OrganizationErrorCodes.CELL_PHONE_EXISTS);
+            Assert.is(personAccountRepo.countByCellphoneAndTenant(person.getCellphone(), getTenant()) != 0, OrganizationErrorCodes.CELL_PHONE_EXISTS);
         }
         if (!Common.isSameStr(person.getIdCardNo(), personEntity.getIdCardNo()) && person.getIdCardNo() != null) {
-            Assert.is(personAccountRepo.countByIdCardNo(person.getIdCardNo()) != 0, OrganizationErrorCodes.ID_CARD_NO_EXISTS);
+            Assert.is(personAccountRepo.countByIdCardNoAndTenant(person.getIdCardNo(), getTenant()) != 0, OrganizationErrorCodes.ID_CARD_NO_EXISTS);
         }
         if (!Common.isSameStr(person.getEmail(), personEntity.getEmail()) && person.getEmail() != null) {
-            Assert.is(personAccountRepo.countByEmail(person.getEmail()) != 0, OrganizationErrorCodes.EMAIL_EXISTS);
+            Assert.is(personAccountRepo.countByEmailAndTenant(person.getEmail(), getTenant()) != 0, OrganizationErrorCodes.EMAIL_EXISTS);
         }
         E old = deepCopy(personEntity);
         putLoggingData("old", deepCopy(personEntity));
@@ -156,18 +159,17 @@ public abstract class AbstractPersonManagementServiceImpl
 
     @Override
     public void resetPassword(String id) {
-        E personEntity = getPersonEntityWithPermissionCheck(id);
-        personEntity.setPassword(AccountsCommon.PASSWORD_GENERATORS.getServiceInstance(Constants.ORGANIZATION_PREFIX).encode(null));
-        personAccountRepo.save(personEntity);
-        putLoggingData("pwd", "reset to default");
+        AccountsCommon.resetPassword(getPersonEntityWithPermissionCheck(id), personAccountRepo);
     }
+
 
     @Override
     public void resetAuthCode(String id) {
-        E personEntity = getPersonEntityWithPermissionCheck(id);
-        personEntity.setAuthCodeKey(null);
-        personEntity.setAuthCodeKeyActiveTime(null);
-        personAccountRepo.save(personEntity);
-        putLoggingData("authCode", "reset");
+        AccountsCommon.resetAuthCode(getPersonEntityWithPermissionCheck(id), personAccountRepo);
+//        E entity = getPersonEntityWithPermissionCheck(id);
+//        entity.setAuthCodeKey(null);
+//        entity.setAuthCodeKeyActiveTime(null);
+//        personAccountRepo.save(entity);
+//        putLoggingData("authCode", "reset");
     }
 }

@@ -20,6 +20,7 @@ import org.coodex.commons.jpa.springdata.SpecCommon;
 import org.coodex.concrete.accounts.organization.entities.*;
 import org.coodex.concrete.accounts.organization.repositories.AbstractPositionRepo;
 import org.coodex.concrete.common.Assert;
+import org.coodex.concrete.accounts.AuthorizableEntity;
 import org.coodex.concrete.common.ConcreteException;
 import org.coodex.concrete.common.ErrorCodes;
 import org.coodex.util.Common;
@@ -30,6 +31,7 @@ import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.*;
 
+import static org.coodex.concrete.accounts.AccountsCommon.getTenant;
 import static org.coodex.concrete.accounts.organization.entities.AbstractEntity.DEFAULT_ORDER;
 import static org.coodex.concrete.common.ConcreteContext.putLoggingData;
 import static org.coodex.concrete.common.OrganizationErrorCodes.POSITION_CANNOT_DELETE;
@@ -89,7 +91,8 @@ public abstract class AbstractManagementService<
         }
 
         //删除所有组织
-        for (OrganizationEntity organizationEntity : organizationRepo.findByHigherLevelId(entity.getId())) {
+        for (OrganizationEntity organizationEntity :
+                organizationRepo.findByTenantAndHigherLevelId(getTenant(), entity.getId())) {
             deletedEntities.addAll(deleteOrganization(organizationEntity));
         }
         organizationRepo.delete(entity);

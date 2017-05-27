@@ -28,16 +28,16 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface AbstractPersonAccountRepo<P extends AbstractPersonAccountEntity>
         extends CrudRepository<P, String>, JpaSpecificationExecutor<P> {
 
-    long countByCellphone(String cellPhone);
+    long countByCellphoneAndTenant(String cellPhone, String tenant);
 
-    long countByIdCardNo(String idCardNo);
+    long countByIdCardNoAndTenant(String idCardNo, String tenant);
 
-    long countByEmail(String email);
+    long countByEmailAndTenant(String email, String tenant);
 
-    P findFirstByCellphone(String cellPhone);
+    P findFirstByCellphoneAndTenant(String cellPhone, String tenant);
 
-    P findFirstByIdCardNo(String idCardNo);
+    P findFirstByIdCardNoAndTenant(String idCardNo, String tenant);
 
-    P findFirstByEmail(String email);
+    P findFirstByEmailAndTenant(String email, String tenant);
 
 }

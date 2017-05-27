@@ -17,8 +17,10 @@
 package org.coodex.concrete.accounts.organization.impl.copiers;
 
 import org.coodex.concrete.accounts.organization.entities.AbstractEntity;
-import org.coodex.concrete.accounts.organization.pojo.AbstractPojo;
+import org.coodex.concrete.accounts.AbstractPojo;
 import org.coodex.concrete.common.AbstractTwoWayCopier;
+import org.coodex.concrete.common.TenantBuilder;
+import org.coodex.concrete.common.TenantBuilderWrapper;
 
 import static org.coodex.concrete.accounts.AccountsCommon.DATE_FORMATTER_SERVICE_LOADER;
 
@@ -27,9 +29,13 @@ import static org.coodex.concrete.accounts.AccountsCommon.DATE_FORMATTER_SERVICE
  */
 public abstract class PojoCopier<T extends AbstractPojo, E extends AbstractEntity>
         extends AbstractTwoWayCopier<T, E> {
+
+    protected static final TenantBuilder tenantBuilder = TenantBuilderWrapper.getInstance();
+
     @Override
     public E copyA2B(T t, E e) {
         e.setName(t.getName());
+        e.setTenant(tenantBuilder.getTenant());
         return e;
     }
 

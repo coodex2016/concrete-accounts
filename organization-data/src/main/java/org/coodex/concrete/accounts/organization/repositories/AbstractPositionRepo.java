@@ -28,7 +28,7 @@ import java.util.List;
 @NoRepositoryBean
 public interface AbstractPositionRepo<P extends AbstractPositionEntity> extends CrudRepository<P, String> {
 
-    long countByBelong(String belong);
+//    long countByBelong(String belong);
 
     List<P> findByBelong(String belong);
 
