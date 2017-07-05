@@ -1,8 +1,0 @@
-org\coodex\concrete\accounts\tenant\reference\api\TenantManagementService.class
-org\coodex\concrete\accounts\tenant\reference\data\repositories\TenantRepository.class
-org\coodex\concrete\accounts\tenant\reference\impl\components\TenantServerSideFactoryImpl.class
-org\coodex\concrete\accounts\tenant\reference\api\TenantRPCService.class
-org\coodex\concrete\accounts\tenant\reference\impl\services\TenantRPCServiceImpl.class
-org\coodex\concrete\accounts\tenant\reference\impl\services\TenantManagementServiceImpl.class
-org\coodex\concrete\accounts\tenant\reference\data\entities\TenantEntity.class
-org\coodex\concrete\accounts\tenant\reference\impl\copiers\TenantCopier.class

@@ -1,8 +1,0 @@
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\data\entities\TenantEntity.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\data\repositories\TenantRepository.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\impl\services\TenantManagementServiceImpl.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\impl\copiers\TenantCopier.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\impl\components\TenantServerSideFactoryImpl.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\impl\services\TenantRPCServiceImpl.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\api\TenantManagementService.java
-D:\Projects\IntelliJ\concrete-accounts\tenant-impl-reference\src\main\java\org\coodex\concrete\accounts\tenant\reference\api\TenantRPCService.java
