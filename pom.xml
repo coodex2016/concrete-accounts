@@ -23,20 +23,22 @@
     <modules>
         <module>bom</module>
         <!-- 组织结构的api -->
-        <module>organization-api</module>
+        <module>organization/api</module>
         <!-- 数据模块 -->
-        <module>organization-data</module>
+        <module>organization/data</module>
         <!-- 实现模块 -->
-        <module>organization-impl</module>
+        <module>organization/impl</module>
+        <!-- 参考实现模块 -->
+        <module>organization/impl-reference</module>
+
         <!-- 通用模块，比如登录、验证等 -->
         <module>common</module>
         <module>common-tools</module>
-        <!-- 参考实现模块 -->
-        <module>organization-impl-reference</module>
-        <module>tenant-api</module>
-        <module>tenant-data</module>
-        <module>tenant-impl</module>
-        <module>tenant-impl-reference</module>
+
+        <module>tenant/api</module>
+        <module>tenant/data</module>
+        <module>tenant/impl</module>
+        <module>tenant/impl-reference</module>
     </modules>
 
 
