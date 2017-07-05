@@ -39,6 +39,8 @@
         <module>tenant/data</module>
         <module>tenant/impl</module>
         <module>tenant/impl-reference</module>
+        <module>simple/api</module>
+        <module>simple/impl</module>
     </modules>
 
 

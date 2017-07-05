@@ -26,6 +26,8 @@ public class AccountID implements Serializable {
     public static final int TYPE_ORGANIZATION = 1;
     public static final int TYPE_TENANT_ADMINISTRATOR = 2;
 
+    public static final int TYPE_SIMPLE = 99999;
+
     private int type;
 
     private String id;
