@@ -16,32 +16,27 @@
 
 package org.coodex.concrete.accounts;
 
-import org.coodex.concrete.common.AcceptableAccountFactory;
-import org.coodex.concrete.common.Account;
-import org.coodex.concrete.common.ConcreteException;
-import org.coodex.concrete.common.Token;
+import org.coodex.concrete.common.*;
 import org.coodex.concrete.core.token.TokenWrapper;
 
-import java.io.Serializable;
-
-import static org.coodex.concrete.accounts.AccountID.TYPE_ADMINISTRATOR;
+import static org.coodex.concrete.accounts.AccountIDImpl.TYPE_ADMINISTRATOR;
 import static org.coodex.concrete.common.AccountsErrorCodes.LOGIN_FAILED;
 
 /**
  * Created by davidoff shen on 2017-05-19.
  */
-public abstract class AbstractAdministratorFactory implements AcceptableAccountFactory<AccountID> {
+public abstract class AbstractAdministratorFactory implements AcceptableAccountFactory<AccountIDImpl> {
 
     private Token token = TokenWrapper.getInstance();
 
     @Override
-    public <ID extends Serializable> Account<ID> getAccountByID(ID id) {
-        if (id == null || !(id instanceof AccountID)) return null;
-        return (Account<ID>) getAdministrator(((AccountID) id).getId());
+    public <ID extends AccountID> Account<ID> getAccountByID(ID id) {
+        if (id == null || !(id instanceof AccountIDImpl)) return null;
+        return (Account<ID>) getAdministrator(((AccountIDImpl) id).getId());
     }
 
     @Override
-    public boolean accept(AccountID param) {
+    public boolean accept(AccountIDImpl param) {
         return param != null && param.getType() == TYPE_ADMINISTRATOR;
     }
 

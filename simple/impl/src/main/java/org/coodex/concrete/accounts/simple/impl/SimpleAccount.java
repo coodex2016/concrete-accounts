@@ -1,5 +1,6 @@
 package org.coodex.concrete.accounts.simple.impl;
 
+import org.coodex.concrete.accounts.AccountIDImpl;
 import org.coodex.concrete.common.NamedAccount;
 import org.coodex.util.Common;
 import org.coodex.util.Profile;
@@ -10,18 +11,18 @@ import java.util.Set;
 /**
  * Created by davidoff shen on 2017-07-05.
  */
-public class SimpleAccount implements NamedAccount<String> {
+public class SimpleAccount implements NamedAccount<AccountIDImpl> {
 
     private final Profile profile;
-    private final String id;
+    private final AccountIDImpl id;
 
-    public SimpleAccount(String id) {
-        this.profile = Profile.getProfile("/accounts/" + id + ".properties");
+    public SimpleAccount(AccountIDImpl id) {
+        this.profile = Profile.getProfile("/accounts/" + id.getId() + ".properties");
         this.id = id;
     }
 
     @Override
-    public String getId() {
+    public AccountIDImpl getId() {
         return id;
     }
 

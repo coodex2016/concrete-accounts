@@ -18,14 +18,12 @@ package org.coodex.concrete.accounts;
 
 import org.coodex.concrete.common.*;
 
-import java.io.Serializable;
-
 import static org.coodex.concrete.common.AccountsErrorCodes.NONE_THIS_ACCOUNT;
 
 /**
  * Created by davidoff shen on 2017-05-26.
  */
-public abstract class AbstractTenantAccountFactory implements AcceptableAccountFactory<AccountID> {
+public abstract class AbstractTenantAccountFactory implements AcceptableAccountFactory<AccountIDImpl> {
 
     private ConcreteCache<String, TenantAccount> accountCache = new ConcreteCache<String, TenantAccount>() {
         @Override
@@ -42,12 +40,12 @@ public abstract class AbstractTenantAccountFactory implements AcceptableAccountF
     protected abstract TenantAccount newAccount(String key);
 
     @Override
-    public <ID extends Serializable> Account<ID> getAccountByID(ID id) {
-        return (Account<ID>) Assert.isNull(accountCache.get(((AccountID) id).getId()), NONE_THIS_ACCOUNT);
+    public <ID extends AccountID> Account<ID> getAccountByID(ID id) {
+        return (Account<ID>) Assert.isNull(accountCache.get(((AccountIDImpl) id).getId()), NONE_THIS_ACCOUNT);
     }
 
     @Override
-    public boolean accept(AccountID param) {
-        return param != null && param.getType() == AccountID.TYPE_TENANT_ADMINISTRATOR;
+    public boolean accept(AccountIDImpl param) {
+        return param != null && param.getType() == AccountIDImpl.TYPE_TENANT_ADMINISTRATOR;
     }
 }

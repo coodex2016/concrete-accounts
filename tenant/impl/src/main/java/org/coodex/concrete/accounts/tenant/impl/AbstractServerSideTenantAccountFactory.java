@@ -16,8 +16,8 @@
 
 package org.coodex.concrete.accounts.tenant.impl;
 
+import org.coodex.concrete.accounts.AccountIDImpl;
 import org.coodex.concrete.accounts.AbstractTenantAccountFactory;
-import org.coodex.concrete.accounts.AccountID;
 import org.coodex.concrete.accounts.TenantAccount;
 import org.coodex.concrete.accounts.tenant.entities.AbstractTenantEntity;
 import org.coodex.concrete.accounts.tenant.repositories.AbstractTenantRepo;
@@ -42,7 +42,7 @@ public abstract class AbstractServerSideTenantAccountFactory<E extends AbstractT
         public TenantAccount copy(E e, TenantAccount tenantAccount) {
             tenantAccount.setAppSet(e.getAppSet());
             tenantAccount.setName(e.getName());
-            tenantAccount.setId(new AccountID(AccountID.TYPE_TENANT_ADMINISTRATOR, e.getId()));
+            tenantAccount.setId(new AccountIDImpl(AccountIDImpl.TYPE_TENANT_ADMINISTRATOR, e.getId()));
             tenantAccount.setRoles(new HashSet<String>(Arrays.asList(TENANT_MANAGER)));
             tenantAccount.setTenant(tenantAccount.getName());
             tenantAccount.setValid(true);

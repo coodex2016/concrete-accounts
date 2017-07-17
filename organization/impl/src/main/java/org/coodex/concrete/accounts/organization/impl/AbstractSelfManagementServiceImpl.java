@@ -16,7 +16,7 @@
 
 package org.coodex.concrete.accounts.organization.impl;
 
-import org.coodex.concrete.accounts.AccountID;
+import org.coodex.concrete.accounts.AccountIDImpl;
 import org.coodex.concrete.accounts.AccountsCommon;
 import org.coodex.concrete.accounts.organization.api.AbstractSelfManagementService;
 import org.coodex.concrete.accounts.organization.entities.*;
@@ -71,8 +71,8 @@ public abstract class AbstractSelfManagementServiceImpl<
 
 //    @Override
     protected PE getCurrentAccountEntity() {
-        Account<AccountID> currentAccount = token.currentAccount();
-        Assert.is(currentAccount.getId().getType() != AccountID.TYPE_ORGANIZATION, NOT_ORGANIZATION_ACCOUNT);
+        Account<AccountIDImpl> currentAccount = token.currentAccount();
+        Assert.is(currentAccount.getId().getType() != AccountIDImpl.TYPE_ORGANIZATION, NOT_ORGANIZATION_ACCOUNT);
         return personAccountRepo.findOne(currentAccount.getId().getId());
     }
 

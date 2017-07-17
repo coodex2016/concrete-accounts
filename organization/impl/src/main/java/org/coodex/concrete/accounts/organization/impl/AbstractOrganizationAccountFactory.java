@@ -16,7 +16,7 @@
 
 package org.coodex.concrete.accounts.organization.impl;
 
-import org.coodex.concrete.accounts.AccountID;
+import org.coodex.concrete.accounts.AccountIDImpl;
 import org.coodex.concrete.accounts.organization.entities.AbstractPersonAccountEntity;
 import org.coodex.concrete.accounts.organization.entities.AbstractPositionEntity;
 import org.coodex.concrete.accounts.organization.entities.OrganizationEntity;
@@ -25,11 +25,10 @@ import org.coodex.concrete.common.*;
 import org.coodex.util.Common;
 
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.coodex.concrete.accounts.AccountID.TYPE_ORGANIZATION;
+import static org.coodex.concrete.accounts.AccountIDImpl.TYPE_ORGANIZATION;
 import static org.coodex.concrete.common.AccountsErrorCodes.NONE_THIS_ACCOUNT;
 
 /**
@@ -38,7 +37,7 @@ import static org.coodex.concrete.common.AccountsErrorCodes.NONE_THIS_ACCOUNT;
 public abstract class AbstractOrganizationAccountFactory
         <J extends AbstractPositionEntity,
                 P extends AbstractPersonAccountEntity<J>>
-        implements AcceptableAccountFactory<AccountID> {
+        implements AcceptableAccountFactory<AccountIDImpl> {
 
     private ConcreteCache<String, OrganizationAccount> accountCache = new ConcreteCache<String, OrganizationAccount>() {
         @Override
@@ -57,7 +56,7 @@ public abstract class AbstractOrganizationAccountFactory
         @Override
         public OrganizationAccount copy(P p, OrganizationAccount organizationAccount) {
 
-            organizationAccount.setId(new AccountID(TYPE_ORGANIZATION, p.getId()));
+            organizationAccount.setId(new AccountIDImpl(TYPE_ORGANIZATION, p.getId()));
             organizationAccount.setName(p.getName());
             organizationAccount.setRoles(getAllRoles(p));
             organizationAccount.setTenant(p.getTenant());
@@ -105,12 +104,12 @@ public abstract class AbstractOrganizationAccountFactory
     protected AbstractPersonAccountRepo<P> accountRepo;
 
     @Override
-    public boolean accept(AccountID accountID) {
+    public boolean accept(AccountIDImpl accountID) {
         return accountID != null && accountID.getType() == TYPE_ORGANIZATION;
     }
 
     @Override
-    public <ID extends Serializable> Account<ID> getAccountByID(ID id) {
-        return (Account<ID>) Assert.isNull(accountCache.get(((AccountID) id).getId()), NONE_THIS_ACCOUNT);
+    public <ID extends AccountID> Account<ID> getAccountByID(ID id) {
+        return (Account<ID>) Assert.isNull(accountCache.get(((AccountIDImpl) id).getId()), NONE_THIS_ACCOUNT);
     }
 }

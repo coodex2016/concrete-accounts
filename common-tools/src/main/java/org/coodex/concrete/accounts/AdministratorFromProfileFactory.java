@@ -56,7 +56,7 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
             return TOTPAuthenticator.authenticate(authCode, ADMINISTRATOR_INFO.getString("authKey"));
         }
 
-//        private AccountID id = ;
+//        private AccountIDImpl id = ;
 
         @Override
         public String getName() {
@@ -64,8 +64,8 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
         }
 
         @Override
-        public AccountID getId() {
-            return new AccountID(AccountID.TYPE_ADMINISTRATOR, uuid);
+        public AccountIDImpl getId() {
+            return new AccountIDImpl(AccountIDImpl.TYPE_ADMINISTRATOR, uuid);
         }
 
         @Override
@@ -99,7 +99,7 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
 //            return TOTPAuthenticator.authenticate(authCode, ADMINISTRATOR_INFO.getString("authKey"));
 //        }
 //
-//        private AccountID id = new AccountID(AccountID.TYPE_ADMINISTRATOR, Common.getUUIDStr());
+//        private AccountIDImpl id = new AccountIDImpl(AccountIDImpl.TYPE_ADMINISTRATOR, Common.getUUIDStr());
 //
 //        @Override
 //        public String getName() {
@@ -107,7 +107,7 @@ public class AdministratorFromProfileFactory extends AbstractAdministratorFactor
 //        }
 //
 //        @Override
-//        public AccountID getId() {
+//        public AccountIDImpl getId() {
 //            return id;
 //        }
 //

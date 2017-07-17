@@ -30,6 +30,7 @@ import org.coodex.util.Common;
 import javax.inject.Inject;
 import java.util.Calendar;
 
+import static org.coodex.concrete.accounts.AccountIDImpl.TYPE_ORGANIZATION;
 import static org.coodex.concrete.accounts.AccountsCommon.checkPassword;
 import static org.coodex.concrete.accounts.AccountsCommon.isCredible;
 import static org.coodex.concrete.common.AccountsErrorCodes.*;
@@ -73,7 +74,7 @@ public abstract class AbstractLoginServiceImpl
             token.setAccountCredible(isCredible(authCode, personEntity));
             token.setAccount(
                     abstractOrganizationAccountFactory.getAccountByID(
-                            new AccountID(AccountID.TYPE_ORGANIZATION, personEntity.getId())));
+                            new AccountIDImpl(TYPE_ORGANIZATION, personEntity.getId())));
 
             putLoggingData("loginUser", personEntity);
             return updateLoginCacheEntry(personEntity);
@@ -222,7 +223,7 @@ public abstract class AbstractLoginServiceImpl
         tenantRPCServiceClient.checkTenant(personEntity.getTenant());
         token.setAccount(
                 abstractOrganizationAccountFactory.getAccountByID(
-                        new AccountID(AccountID.TYPE_ORGANIZATION, personEntity.getId())));
+                        new AccountIDImpl(TYPE_ORGANIZATION, personEntity.getId())));
         token.setAccountCredible(false);
         putLoggingData("loginUser", personEntity);
     }
@@ -231,7 +232,7 @@ public abstract class AbstractLoginServiceImpl
     public String identification(String authCode) {
         // TODO: 丑陋
         PE personEntity = Assert.isNull(
-                personAccountRepo.findOne(((AccountID) (token.currentAccount().getId())).getId()),
+                personAccountRepo.findOne(((AccountIDImpl) (token.currentAccount().getId())).getId()),
                 NONE_THIS_ACCOUNT);
         String credential = null;
         if (isCredible(authCode, personEntity)) {

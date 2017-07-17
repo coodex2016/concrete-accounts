@@ -19,21 +19,17 @@ package org.coodex.concrete.accounts;
 import org.coodex.concrete.common.NamedAccount;
 import org.coodex.concrete.common.SaaSAccount;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
-
-import static org.coodex.concrete.accounts.AccountManagementRoles.TENANT_MANAGER;
 
 /**
  * Created by davidoff shen on 2017-05-26.
  */
-public class TenantAccount implements SaaSAccount<AccountID>, NamedAccount<AccountID> {
+public class TenantAccount implements SaaSAccount<AccountIDImpl>, NamedAccount<AccountIDImpl> {
 
     private String name;
     private String tenant;
     private String appSet;
-    private AccountID id;
+    private AccountIDImpl id;
     private boolean valid = true;
     private Set<String> roles;
 
@@ -51,11 +47,11 @@ public class TenantAccount implements SaaSAccount<AccountID>, NamedAccount<Accou
     }
 
     @Override
-    public AccountID getId() {
+    public AccountIDImpl getId() {
         return id;
     }
 
-    public void setId(AccountID id) {
+    public void setId(AccountIDImpl id) {
         this.id = id;
     }
 

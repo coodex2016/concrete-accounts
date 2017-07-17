@@ -1,6 +1,6 @@
 package org.coodex.concrete.accounts.simple.impl;
 
-import org.coodex.concrete.accounts.AccountID;
+import org.coodex.concrete.accounts.AccountIDImpl;
 import org.coodex.concrete.accounts.TOTPAuthenticator;
 import org.coodex.concrete.accounts.simple.api.Login;
 import org.coodex.concrete.common.AccountsErrorCodes;
@@ -10,6 +10,8 @@ import org.coodex.concrete.core.token.TokenWrapper;
 import org.coodex.util.Profile;
 
 import javax.inject.Inject;
+
+import static org.coodex.concrete.accounts.AccountIDImpl.TYPE_SIMPLE;
 
 /**
  * Created by davidoff shen on 2017-07-05.
@@ -26,9 +28,10 @@ public class SimpleAccountLoginImpl implements Login {
     @Override
     public String login(String account, String password, String authCode) {
 
-        Assert.not(accountFactory.accept(new AccountID(AccountID.TYPE_SIMPLE, account)), AccountsErrorCodes.NONE_THIS_ACCOUNT);
+        AccountIDImpl accountId = new AccountIDImpl(TYPE_SIMPLE, account);
+        Assert.not(accountFactory.accept(accountId), AccountsErrorCodes.NONE_THIS_ACCOUNT);
 
-        SimpleAccount simpleAccount = (SimpleAccount) accountFactory.getAccountByID(account);
+        SimpleAccount simpleAccount = (SimpleAccount) accountFactory.getAccountByID(accountId);
         if (profile.getBool("password", true)) {
             Assert.is(password == null || !password.equals(simpleAccount.getPassword()),
                     AccountsErrorCodes.LOGIN_FAILED);

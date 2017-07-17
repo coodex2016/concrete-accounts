@@ -16,12 +16,13 @@
 
 package org.coodex.concrete.accounts;
 
-import java.io.Serializable;
+import org.coodex.concrete.common.AccountID;
+
 
 /**
  * Created by davidoff shen on 2017-05-09.
  */
-public class AccountID implements Serializable {
+public class AccountIDImpl implements AccountID {
     public static final int TYPE_ADMINISTRATOR = 0;
     public static final int TYPE_ORGANIZATION = 1;
     public static final int TYPE_TENANT_ADMINISTRATOR = 2;
@@ -32,10 +33,10 @@ public class AccountID implements Serializable {
 
     private String id;
 
-    public AccountID() {
+    public AccountIDImpl() {
     }
 
-    public AccountID(int type, String id) {
+    public AccountIDImpl(int type, String id) {
         this.type = type;
         this.id = id;
     }
@@ -65,5 +66,10 @@ public class AccountID implements Serializable {
     @Override
     public String toString() {
         return id;
+    }
+
+    @Override
+    public String serialize() {
+        return AccountIDImplDeserializer.serialize(this);
     }
 }
