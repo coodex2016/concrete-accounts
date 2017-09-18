@@ -23,6 +23,7 @@ import org.coodex.concrete.accounts.organization.pojo.Position;
 import org.coodex.concrete.api.*;
 import org.coodex.concrete.api.pojo.StrID;
 import org.coodex.concrete.jaxrs.BigString;
+import org.coodex.util.Parameter;
 
 import java.util.List;
 import java.util.Set;
@@ -60,24 +61,32 @@ public interface AbstractSelfManagementService<
     @MicroService("pwd")
     @Description(name = "修改当前人员密码")
     @Safely
-    void updatePassword(@BigString String password, @BigString String authCode);
+    void updatePassword(
+            @Parameter("password") @BigString String password,
+            @Parameter("authCode") @BigString String authCode);
 
     @MicroService("cellphone")
     @Description(name = "修改当前人员手机号")
     @Safely
-    void updateCellPhone(@BigString String cellPhone, @BigString String authCode);
+    void updateCellPhone(
+            @Parameter("cellPhone") @BigString String cellPhone,
+            @Parameter("authCode") @BigString String authCode);
 
     @MicroService("email")
     @Description(name = "修改当前人员电子邮件地址")
     @Safely
-    void updateEmail(@BigString String email, @BigString String authCode);
+    void updateEmail(
+            @Parameter("email") @BigString String email,
+            @Parameter("authCode") @BigString String authCode);
 
     @MicroService("totp")
     @Description(name = "获取待绑定的Authenticator信息",
             description = "如果原authKey已失效，authCode可以为空。新的key仅在10分钟以内有效")
-    String authenticatorDesc(@BigString String authCode);
+    String authenticatorDesc(
+            @Parameter("authCode") @BigString String authCode);
 
     @MicroService("auth")
     @Description(name = "绑定Authenticator")
-    void bindAuthKey(@BigString String authCode);
+    void bindAuthKey(
+            @Parameter("authCode") @BigString String authCode);
 }

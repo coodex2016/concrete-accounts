@@ -18,6 +18,7 @@ package org.coodex.concrete.accounts.organization.api;
 
 import org.coodex.concrete.api.*;
 import org.coodex.concrete.jaxrs.BigString;
+import org.coodex.util.Parameter;
 
 /**
  * Created by davidoff shen on 2017-05-03.
@@ -27,31 +28,40 @@ public interface AbstractLoginService extends ConcreteService {
 
     @Description(name = "帐号登录", description = "返回值为缓存信息，用于有效期内免秘登录")
     String login(
-            String tenant,
+            @Parameter("tenant")
+                    String tenant,
             @Description(name = "帐号", description = "可以是身份证号/邮箱/手机号")
             @BigString
+            @Parameter("account")
                     String account,
             @Description(name = "密码")
             @BigString
+            @Parameter("password")
                     String password,
             @Description(name = "认证码",
                     description = "为空则表示可能尚未绑定认证码或认证码尚未生效")
             @BigString
+            @Parameter("authCode")
                     String authCode);
 
     @MicroService("login/administrator")
     @Description(name = "系统管理员登录", description = "用于系统初始化管理")
-    void administratorLogin(String tenant, @BigString String password, @BigString String authCode);
+    void administratorLogin(
+            @Parameter("tenant") String tenant,
+            @Parameter("password") @BigString String password,
+            @Parameter("authCode") @BigString String authCode);
 
     @MicroService("login/credential")
     @Description(name = "使用缓存的令牌登录", description = "登录后账户为不可信状态")
-    void loginWith(@BigString String credential);
+    void loginWith(
+            @Parameter("credential") @BigString String credential);
 
 
     @Description(name = "使用授权码验证身份", description = "验证成功后，当前令牌账户置为可信状态")
     @MicroService("login/identification")
     @AccessAllow
-    String identification(@BigString String authCode);
+    String identification(
+            @Parameter("authCode") @BigString String authCode);
 
 
     @Description(name = "注销登录", description = "注销后，缓存的令牌也同时失效")

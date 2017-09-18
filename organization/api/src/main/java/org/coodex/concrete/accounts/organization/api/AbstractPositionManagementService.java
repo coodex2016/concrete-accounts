@@ -20,6 +20,7 @@ import org.coodex.concrete.accounts.organization.pojo.Position;
 import org.coodex.concrete.api.*;
 import org.coodex.concrete.api.pojo.StrID;
 import org.coodex.concrete.jaxrs.BigString;
+import org.coodex.util.Parameter;
 
 import java.util.Set;
 
@@ -37,29 +38,39 @@ import static org.coodex.concrete.accounts.AccountManagementRoles.TENANT_MANAGER
 public interface AbstractPositionManagementService<P extends Position> extends ConcreteService {
 
     @Description(name = "新建职位")
-    StrID<P> save(P position, @BigString String belong);
+    StrID<P> save(
+            @Parameter("position") P position,
+            @Parameter("belong") @BigString String belong);
 
     @Description(name = "修改职位信息")
-    void update(String id, P position);
+    void update(
+            @Parameter("id") String id,
+            @Parameter("position") P position);
 
     @Description(name = "变更职位归属")
     @MicroService("{id}/changeTo")
-    void updateBelongTo(String id, String belong);
+    void updateBelongTo(
+            @Parameter("id") String id,
+            @Parameter("belong") String belong);
 
     @Description(name = "调整职位顺序")
     @MicroService("{id}/order")
-    void updateOrder(String id, Integer order);
+    void updateOrder(
+            @Parameter("id") String id,
+            @Parameter("order") Integer order);
 
     @Description(name = "删除职位")
-    void delete(String id);
+    void delete(@Parameter("id") String id);
 
     @MicroService("{id}/roles")
     @Description(name = "为职位赋角色", description = "以新角色为准")
-    void grantTo(String id, String[] roles);
+    void grantTo(
+            @Parameter("id") String id,
+            @Parameter("roles") String[] roles);
 
     @MicroService("{id}/roles")
     @Description(name = "获取职位角色")
     @AccessAllow
-    Set<String> roles(String id);
+    Set<String> roles(@Parameter("id") String id);
 
 }
