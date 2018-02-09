@@ -17,7 +17,7 @@
 package org.coodex.concrete.accounts.tenant.impl;
 
 import org.coodex.commons.jpa.criteria.Operators;
-import org.coodex.commons.jpa.springdata.PageCopier;
+import org.coodex.commons.jpa.springdata.PageHelper;
 import org.coodex.commons.jpa.springdata.SpecCommon;
 import org.coodex.concrete.accounts.AccountsCommon;
 import org.coodex.concrete.accounts.tenant.api.AbstractTenantManagementService;
@@ -27,7 +27,6 @@ import org.coodex.concrete.accounts.tenant.pojo.TenantQuery;
 import org.coodex.concrete.accounts.tenant.repositories.AbstractTenantRepo;
 import org.coodex.concrete.api.pojo.PageRequest;
 import org.coodex.concrete.api.pojo.PageResult;
-import org.coodex.concrete.api.pojo.SortedPageRequest;
 import org.coodex.concrete.api.pojo.StrID;
 import org.coodex.concrete.common.*;
 import org.coodex.util.Common;
@@ -89,7 +88,7 @@ public abstract class AbstractTenantManagementServiceImpl<T extends Tenant, E ex
         Page<E> page = specificationList.size() > 0 ?
                 tenantRepo.findAll(SpecCommon.and(specificationList), toPageable(request)) :
                 tenantRepo.findAll(toPageable(request));
-        return PageCopier.copy(page, copier.b2aCopier());
+        return PageHelper.copy(page, copier.b2aCopier());
     }
 
     protected Pageable toPageable(PageRequest request) {
@@ -101,13 +100,13 @@ public abstract class AbstractTenantManagementServiceImpl<T extends Tenant, E ex
         List<Specification<E>> specificationList = new ArrayList<Specification<E>>();
         if (query != null) {
             if (query.isUsing() != null)
-                specificationList.add(SpecCommon.<E, Boolean>spec(Operators.Logical.EQUAL, "using", query.isUsing()));
+                specificationList.add(SpecCommon.<E, Boolean>equals("using", query.isUsing()));
 
             if (!Common.isBlank(query.getAccountNameLike()))
-                specificationList.add(SpecCommon.<E, String>spec(Operators.Logical.LIKE, "accountName", query.getAccountNameLike()));
+                specificationList.add(SpecCommon.<E>like("accountName", query.getAccountNameLike()));
 
             if (!Common.isBlank(query.getNameLike()))
-                specificationList.add(SpecCommon.<E, String>spec(Operators.Logical.LIKE, "name", query.getNameLike()));
+                specificationList.add(SpecCommon.<E>like("name", query.getNameLike()));
 
         }
         return specificationList;

@@ -16,8 +16,8 @@
 
 package org.coodex.concrete.accounts;
 
-import com.alibaba.fastjson.JSON;
 import org.coodex.concrete.common.ConcreteHelper;
+import org.coodex.concrete.common.JSONSerializerFactory;
 import org.coodex.concrete.common.Token;
 import org.coodex.concrete.core.token.TokenWrapper;
 import org.coodex.concrete.jaxrs.Client;
@@ -39,7 +39,7 @@ public class TenantRPCServiceClientImpl implements TenantRPCServiceClient {
 
 
     protected TenantRPCService getRPCService() {
-        return Client.getBean(TenantRPCService.class,
+        return Client.getInstance(TenantRPCService.class,
                 ConcreteHelper.getProfile().getString("tenant.RPC.service", "local"));
     }
 
@@ -83,6 +83,6 @@ public class TenantRPCServiceClientImpl implements TenantRPCServiceClient {
 
     @Override
     public <T extends Serializable> void sendMessage(String msgName, T msgBody) {
-        getRPCService().sendMessage(getTenant(), msgName, JSON.toJSONString(msgBody));
+        getRPCService().sendMessage(getTenant(), msgName, JSONSerializerFactory.getInstance().toJson(msgBody));
     }
 }
